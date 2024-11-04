@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "TailorPath",
+  name: "Solver",
   description:
-    "Match your skills to top job opportunities tailored to your needs and career goals.",
+    "Solve your mathematics doubt with handwriting recognition",
   navItems: [
     {
       label: "Home",
