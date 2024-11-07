@@ -103,7 +103,7 @@ const SignaturePad = () => {
         }
     };
 
-    const saveSignature = () => {
+    const saveSignature = async() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -120,6 +120,26 @@ const SignaturePad = () => {
         tempCtx.drawImage(canvas, 0, 0);
 
         const dataUrl = tempCanvas.toDataURL("image/png");
+        const formData = new FormData();
+        formData.append("image", dataUrl);
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const result = await response.json();
+            console.log(result);
+        } catch (error) {
+            console.error("There was a problem with the fetch operation:", error);
+        }
+
+
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = "signature.png";
