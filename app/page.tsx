@@ -26,8 +26,8 @@ const SignaturePad = () => {
         if (!file) return;
 
         const formData = new FormData();
-        formData.append("image", file);
-
+        formData.append("file", file);
+        formData.append("mode", mode ? "basic" : "linear");
         try {
             const response = await fetch("http://127.0.0.1:5000/predict", {
                 method: "POST",
@@ -40,6 +40,18 @@ const SignaturePad = () => {
 
             const result = await response.json();
             console.log(result);
+            setResult(result.result);
+            setOperation(result.operation);
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+            //draw the file image to the canvas
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
+            const image = new Image();
+            image.src = URL.createObjectURL(file);
+            image.onload = () => {
+                ctx.drawImage(image, 0, 0);
+            };
         } catch (error) {
             console.error("There was a problem with the fetch operation:", error);
         }
